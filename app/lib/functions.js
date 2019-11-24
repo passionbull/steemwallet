@@ -13,6 +13,19 @@ var functions = {
 		return Math.round(Math.pow(36, length + 1) - Math.random() * Math.pow(36, length)).toString(36).slice(1);
 	},
 
+	prepareSteemEngineAPIbody: function (params) {
+		//function to fill the api body
+		apicounter++;
+		var baseobj = {"jsonrpc":"2.0", 
+						"method":"find", 
+						"id":apicounter};
+		if(params) {
+			baseobj['params'] = params;
+		}
+		return baseobj;
+	},
+
+
 	prepareAPIbody: function (method, params) {
 		//function to fill the api body
 		apicounter++;
@@ -224,6 +237,41 @@ var functions = {
 		}
 	},
 
+	steemEngineAPIcall: function(account, cbres, cberr){
+		var apiurl = "https://api.steem-engine.com/rpc/contracts"
+		var params = {
+			"contract":"tokens",
+            "table":"balances",
+            "query":{"account": account},
+            "limit":1000,
+            "offset":0,
+            "indexes":""
+		}
+		module.exports.xhrcall(
+			apiurl,
+			'POST',
+			false,
+			function(e){
+				// simple validation here.
+
+				try {
+					// try parse the response...
+					//console.log(e);
+					var result = JSON.parse(e);
+					if("error" in result) {
+						cberr(result.error);
+					} else {
+						cbres(result);
+					}
+
+				} catch(e) {
+					cberr(e.message);
+				}
+			},
+			cberr,
+				module.exports.prepareSteemEngineAPIbody(params)
+			);
+	},
 	steemAPIcall : function(method,params,cbres,cberr, node) {
 		var apiurl = Alloy.Globals.config.apiurl;
 

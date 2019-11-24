@@ -926,6 +926,7 @@ function updateFiat() {
 	if (Ti.App.Properties.getString('currentaccount') != '') {
 		currentaccount = Ti.App.Properties.getString('currentaccount');
 		var currentaccountdata = helpers.getUserObject(currentaccount);
+		console.log(currentaccount, currentaccountdata);
 		if(currentaccountdata) {
 			if(currentaccountdata.hasOwnProperty('balance')) {
 				//console.log(currentaccountdata);
@@ -1784,6 +1785,27 @@ function setCurrentAccount() {
 		}
 
 		var currentaccountdata = helpers.getUserObject(currentaccount);
+		// console.log("Hello", currentaccount);
+		// console.log(currentaccountdata);
+
+		helpers.steemEngineAPIcall(
+			currentaccount,function(success){
+				console.log(success.result);
+				var token_list = success.result;
+				var token = token_list.find(function(a) {
+					return a.symbol === 'SCT';
+				  });				
+				console.log("token_list",token_list);
+				console.log("token",token);
+				$.account_amount_sct.text = (helpers.formatToLocale(parseFloat(token.balance*1), 3) + ' SCT');
+			},
+			function(error) {
+				console.log(error);
+			}
+		)
+		console.log("Hello wallet");
+
+		
 
 		var image2show = "https://steemitimages.com/u/" + currentaccount + "/avatar";
 		if (currentaccountdata.image != "") {

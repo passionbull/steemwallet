@@ -21,6 +21,9 @@
 				<Label id="account_amount_sbd" class="fontRegular fontSize25 textAlignLeft width_UIFILL">0.000 SBD</Label>
 				<Label id="account_amount_sbd_fiat" class="fontRegular fontSize15 textAlignLeft width_UIFILL">$ 0.00</Label>
 
+				<View class="height15"/>
+				<Label id="account_amount_sct" class="fontRegular fontSize25 textAlignLeft width_UIFILL">0.000 SCT</Label>
+
 			</View>
 			<View class="height15"/>
 			<View class="divider container_pad inputholder_divider"/>
